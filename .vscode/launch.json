@@ -1,0 +1,18 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "type": "lldb",
+          "request": "launch",
+          "name": "Debug",
+          "program": "${workspaceFolder}/build/bin/ivex",
+          // "args": ["-d", "/Users/joeydelport/Development/JoSIM/testint/Unshunted_JJ_IVs/SFQ518_17_2_4_PCM411_2_B2_5.iv"],
+          // "args": ["\".model jj1 jj(rtype=1, vg=2.8mV, cap=0.07pF, r0=160, rn=16, icrit=0.1mA)\""],
+          // "args": ["mdoel.model"],
+          "cwd": "${workspaceFolder}"
+      }
+  ]
+}

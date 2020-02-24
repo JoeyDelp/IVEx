@@ -1,0 +1,38 @@
+# Define stages
+stages:
+  - build
+
+# Install conan configuration
+before_script:
+  - conan config install https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.com/quantumcodingsolutions/tools/conan-configuration.git --type git
+
+variables:
+  CONAN_USER: 'qcs'
+  CONAN_CHANNEL: '$CI_COMMIT_REF_NAME'
+  CONAN_PROFILE: '$CI_JOB_NAME'
+
+# Build matrix
+gcc_debug:
+  image: registry.gitlab.com/quantumcodingsolutions/docker/dev-gcc:master
+  stage: build
+  script: "./scripts/conan_create.sh"
+
+clang_debug:
+  image: registry.gitlab.com/quantumcodingsolutions/docker/dev-clang:master
+  stage: build
+  script: "./scripts/conan_create.sh"
+
+clang_libstdcpp11:
+  image: registry.gitlab.com/quantumcodingsolutions/docker/dev-clang:master
+  stage: build
+  script: "./scripts/conan_create.sh"
+
+clang_undefined:
+  image: registry.gitlab.com/quantumcodingsolutions/docker/dev-clang:master
+  stage: build
+  script: "./scripts/conan_create.sh"
+
+clang_address:
+  image: registry.gitlab.com/quantumcodingsolutions/docker/dev-clang:master
+  stage: build
+  script: "./scripts/conan_create.sh"

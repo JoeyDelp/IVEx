@@ -1,8 +1,8 @@
 # IVEx - JJ Current/Voltage Characteristics Extraction Tool
-### Introduction
+## Introduction
 IV Ex(tractor) is a command line tool created to extract the current/voltage characteristics of a Josephson junction. With the capability to generate a *.model* SPICE card it utilizes the [JoSIM](https://github.com/JoeyDelp/JoSIM.git) library to seamlessly simulate and generate the IV curve data.
 
-### Usage
+## Usage
 ```
 ivex [-d data.iv] ".model" | file.model
 ```
@@ -13,6 +13,6 @@ The syntax required/produced for the JJ model follows the syntax guideline speci
 
 ---
 
-### Changelog:
+## Changelog:
 ### Version 0.1:
 - Initial commit
