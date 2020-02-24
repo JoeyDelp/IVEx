@@ -1,0 +1,6 @@
+project_name = "IVEx"
+project_type = "Executable"
+project_version = "0.1"
+project_namespace = "ivex"
+target_name = "ivex"
+
