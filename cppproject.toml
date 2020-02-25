@@ -4,3 +4,5 @@ project_version = "0.1"
 project_namespace = "ivex"
 target_name = "ivex"
 
+[[ requires ]]
+conan_package = "JoSIM/2.4@joeydelp/release"

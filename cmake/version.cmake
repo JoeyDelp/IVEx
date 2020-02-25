@@ -1,0 +1,1 @@
+add_definitions(-DVERSION="${CMAKE_PROJECT_VERSION}")

@@ -2,15 +2,18 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(IVEx VERSION 0.1)
 
-# CMake files
 include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
-add_definitions(-DVERSION="${CMAKE_PROJECT_VERSION}")
+include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
 
 # Conanfile
 include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
-# Add executable
+# Library dependencies
+
+# Add library
+add_library(ivex)
+add_library(ivex::ivex ALIAS ivex)
 add_subdirectory(src)
 
 # Minimum compiler requirements
@@ -20,16 +23,13 @@ target_compile_features(ivex PUBLIC cxx_std_17)
 target_include_directories(ivex PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
-  /usr/local/include
 )
 
-# Library dependencies
-
-find_library(JOSIM_LIB libjosim)
-
-target_link_libraries(ivex $JOSIM_LIB)
-
 # Link dependencies
+target_link_libraries(ivex PUBLIC
+  CONAN_PKG::JoSIM
+)
+
 # Testing
 include(CTest)
 enable_testing()

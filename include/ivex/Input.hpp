@@ -7,8 +7,8 @@ namespace ivex {
     ivex_vars() : datafile(false) {}
     std::optional<std::string> datafile_name, modelfile_name, input_string;
     bool datafile;
-  } ivars;
+  };
 
-  void input_parse(int argc, const char **argv);
+  void input_parse(int argc, const char **argv, ivex_vars &ivars);
   
 }

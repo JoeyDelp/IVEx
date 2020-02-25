@@ -9,6 +9,7 @@ add_executable(ivex_unit)
 
  # Unit test executable sources
 target_sources(ivex_unit PRIVATE
+  Input.cpp
   catch_main.cpp
 )
 
@@ -16,6 +17,7 @@ target_sources(ivex_unit PRIVATE
 
 # Link unit test dependencies
 target_link_libraries(ivex_unit PRIVATE
+  ivex
   Catch2::Catch2
 )
 

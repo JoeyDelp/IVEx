@@ -58,3 +58,4 @@ class IVExConan(ConanFile):
 
     def requirements(self):
         """ Interface dependencies """
+        self.requires("JoSIM/2.4@joeydelp/release")

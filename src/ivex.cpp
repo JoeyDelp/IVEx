@@ -12,11 +12,12 @@ void version_info() {
 int main(int argc, const char **argv) {
   version_info();
   try {
+    ivex::ivex_vars ivars;
     // Read in sysargs and determine mode as model or data
     JoSIM::Input input_object;
-    ivex::input_parse(argc, argv);
+    ivex::input_parse(argc, argv, ivars);
     // If not a datafile
-    if(!ivex::ivars.datafile) {
+    if(!ivars.datafile) {
       // Simulate the identified model
     } else {
       // Extract model
