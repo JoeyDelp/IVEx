@@ -17,7 +17,7 @@ int main(int argc, const char **argv) {
     JoSIM::Input input_object;
     ivex::input_parse(argc, argv, ivars);
     // If not a datafile
-    if(!ivars.datafile) {
+    if(!ivars.datafile_name) {
       // Simulate the identified model
     } else {
       // Extract model
