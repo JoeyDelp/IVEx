@@ -4,5 +4,7 @@ project_version = "0.1"
 project_namespace = "ivex"
 target_name = "ivex"
 
-[[ requires ]]
-conan_package = "JoSIM/2.4@joeydelp/release"
+requires = [
+  {conan_package = "JoSIM/2.4@joeydelp/release"},
+  {conan_package = "CLI11/1.9.0@cliutils/stable"}
+]

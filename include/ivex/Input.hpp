@@ -11,6 +11,6 @@ namespace ivex {
       outputfile_name;
   };
 
-  void input_parse(int argc, const char **argv, ivex_vars &ivars);
+  int input_parse(int argc, const char **argv, ivex_vars &ivars);
   
 }

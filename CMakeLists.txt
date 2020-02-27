@@ -28,6 +28,7 @@ target_include_directories(ivex PUBLIC
 # Link dependencies
 target_link_libraries(ivex PUBLIC
   CONAN_PKG::JoSIM
+  CONAN_PKG::CLI11
 )
 
 # Testing
