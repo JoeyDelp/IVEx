@@ -2,14 +2,13 @@
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
 project(IVEx VERSION 0.1)
 
-include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
-
 # Conanfile
 include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
-# Library dependencies
+# CMake scripts
+include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
 
 # Add library
 add_library(ivex)

@@ -1,4 +1,5 @@
 #include <JoSIM/Input.hpp>
+#include <JoSIM/Errors.hpp>
 #include <optional>
 #include <string>
 
@@ -12,5 +13,9 @@ namespace ivex {
   };
 
   int input_parse(int argc, const char **argv, ivex_vars &ivars);
+
+  void parse_model(JoSIM::Input &input_object, ivex_vars &ivars);
+
+  void create_standard_netlist(JoSIM::Input &input_object, const ivex_vars &ivars);
   
 }

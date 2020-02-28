@@ -1,14 +1,10 @@
 #include "ivex/Input.hpp"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "CLI/CLI.hpp"
 
 using namespace ivex;
-
-// Local function prototypes
-std::string missing_arguments();
-std::string bad_arguments();
-void display_help();
 
 class MyFormatter : public CLI::Formatter {
   public:
@@ -18,55 +14,56 @@ class MyFormatter : public CLI::Formatter {
 
 int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
   CLI::App app;
-
   app.formatter(std::make_shared<MyFormatter>());
+  auto string_or_file = app.add_option_group("Model string or model file","");
 
-  CLI::Option* data_option = app.add_option("-d,--data", ivars.datafile_name, "File containing space/comma seperated IV data")
+
+  CLI::Option* data_file = app.add_option("-d,--data", ivars.datafile_name, "File containing space/comma seperated IV data")
     ->check(CLI::ExistingFile);
 
-  CLI::Option* model_option = app.add_option("-m,--model", ivars.modelfile_name, "File used for input/output of .model card");
+  CLI::Option* model_file = string_or_file
+    ->add_option("-m,--model", ivars.modelfile_name, "File used for input/output of .model card");
 
-  CLI::Option* string_option = app.add_option("-s,--smodel", ivars.model_string, "String representation of .model card to use");
-  
-  model_option->excludes(string_option);
-  string_option->excludes(model_option);
-  model_option->required();
-  string_option->required();
+  CLI::Option* model_string = string_or_file
+      ->add_option("-s,--smodel", ivars.model_string, "String representation of .model card to use");
 
-  CLI::Option* output_positional = app.add_option("-o,--output,output.csv", ivars.outputfile_name, "Output comma seperated value (csv) used to store simulated IV data")
+  string_or_file->require_option(1);
+
+  app.add_option("output.csv", ivars.outputfile_name, "Output comma seperated value (csv) used to store simulated IV data")
     ->required();
+
+  if(!ivars.datafile_name) model_file->check(CLI::ExistingFile);
 
   CLI11_PARSE(app, argc, argv);
   return 0;
 }
 
-// Local functions
-std::string missing_arguments(){
-  return "Invalid usage: Missing arguments\n"
-         "Usage: ivex [-d data.iv] \".model\" | file.model iv.csv\n"
-         "\n"
-         "Please refer to the documentation for more info.";
+void ivex::parse_model(JoSIM::Input &input_object, ivex_vars &ivars) {
+  if(ivars.modelfile_name) {
+    std::string line;
+    std::ifstream ifile(ivars.modelfile_name.value());
+    std::vector<std::string> fileLines;
+    if (ifile.is_open()) {
+      while (!ifile.eof()) {
+        getline(ifile, line);
+      }
+      if (fileLines.empty()) { 
+        JoSIM::Errors::input_errors(JoSIM::InputErrors::EMPTY_FILE, ivars.modelfile_name.value());
+      }
+    } else {
+      JoSIM::Errors::input_errors(JoSIM::InputErrors::CANNOT_OPEN_FILE, ivars.modelfile_name.value());
+    }
+    ivars.model_string = fileLines.back();
+  }
+  JoSIM::Model::parse_model(std::make_pair(ivars.model_string.value(), std::string("")), input_object.netlist.models_new, input_object.parameters);
 }
 
-std::string bad_arguments() {
-  return "Invalid usage: Bad arguments.\n"
-         "Please revise arguments. See usage.\n"
-         "\n"
-         "Usage: ivex [-d data.iv] \".model\" | file.model iv.csv\n"
-         "\n"
-         "Please refer to the documentation for more info.";
+void ivex::create_standard_netlist(JoSIM::Input &input_object, const ivex_vars &ivars) {
+  input_object.netlist.maindesign.emplace_back("IS 0 1 pwl(0 0 10p 0 50p currentstep)\n"
+                                               "B1 1 0 " + input_object.netlist.models_new.at(0).second + " area=1");
+  input_object.netlist.expand_maindesign();
+  input_object.transSim.set_tstop(1E-9);
+  input_object.transSim.set_prstep(5E-14);
+  input_object.transSim.set_simsize();
 }
 
-void display_help() {
-  std::cout << "Usage: ivex [-d data.iv] \".model\" | file.model iv.csv\n"
-               "\n"
-               "data.iv is an optional space or comma seperated\n"
-               "file containing current and voltage dat used for\n"
-               "extracting a .model card\n"
-               "\n"
-               "\".model\" or file.model is a string/file where the model\n"
-               "generated/sourced is saved/found\n"
-               "\n"
-               "iv.csv is the file where the simulated IV curve data is stored."
-               << std::endl;
-}

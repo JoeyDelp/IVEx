@@ -12,9 +12,8 @@ def get_version():
         # Return None if it's not a git repo
         return None
 
-
 class IVExConan(ConanFile):
-    """ Conan file for ivex::ivex """
+    """ Conan file for ivex"""
 
     name = "IVEx"
     version = get_version()
@@ -54,7 +53,7 @@ class IVExConan(ConanFile):
 
     def build_requirements(self):
         """ Build dependencies """
-        self.build_requires("Catch2/2.10.2@catchorg/stable")
+
 
     def requirements(self):
         """ Interface dependencies """
