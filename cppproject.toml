@@ -6,5 +6,6 @@ target_name = "ivex"
 
 requires = [
   {conan_package = "JoSIM/2.4@joeydelp/release"},
-  {conan_package = "CLI11/1.9.0@cliutils/stable"}
+  {conan_package = "CLI11/1.9.0@cliutils/stable"},
+  {conan_package = "Catch2/2.11.1@catchorg/stable"}
 ]

@@ -7,8 +7,10 @@ include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
 # CMake scripts
+include(${PROJECT_SOURCE_DIR}/cmake/warnings.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/make_static_target.cmake)
 
 # Add library
 add_library(ivex)
@@ -28,7 +30,19 @@ target_include_directories(ivex PUBLIC
 target_link_libraries(ivex PUBLIC
   CONAN_PKG::JoSIM
   CONAN_PKG::CLI11
+  CONAN_PKG::Catch2
 )
+
+# CLI interface
+
+add_executable(ivex-cli src/ivex.cpp)
+
+# Dependencies
+target_link_libraries(ivex-cli PRIVATE ivex)
+
+# Properties
+make_target_static(ivex-cli)
+target_add_warnings(ivex-cli)
 
 # Testing
 include(CTest)

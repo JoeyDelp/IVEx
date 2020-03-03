@@ -16,6 +16,8 @@ namespace ivex {
 
   void parse_model(JoSIM::Input &input_object, ivex_vars &ivars);
 
-  void create_standard_netlist(JoSIM::Input &input_object, const ivex_vars &ivars);
+  void create_standard_netlist(JoSIM::Input &input_object, const std::string &cur_start_val);
+
+  void setup_transsim(JoSIM::Input &input_object);
   
 }

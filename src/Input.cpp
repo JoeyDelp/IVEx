@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 #include "CLI/CLI.hpp"
 
 using namespace ivex;
@@ -34,7 +35,11 @@ int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
 
   if(!ivars.datafile_name) model_file->check(CLI::ExistingFile);
 
-  CLI11_PARSE(app, argc, argv);
+  try { 
+    app.parse((argc), (argv)); 
+  } catch(const CLI::ParseError &e) { 
+    return app.exit(e); 
+  }
   return 0;
 }
 
@@ -46,6 +51,10 @@ void ivex::parse_model(JoSIM::Input &input_object, ivex_vars &ivars) {
     if (ifile.is_open()) {
       while (!ifile.eof()) {
         getline(ifile, line);
+        if(!line.empty()) {
+          std::transform(line.begin(), line.end(), line.begin(), ::toupper);
+          fileLines.emplace_back(line);
+        }
       }
       if (fileLines.empty()) { 
         JoSIM::Errors::input_errors(JoSIM::InputErrors::EMPTY_FILE, ivars.modelfile_name.value());
@@ -54,16 +63,27 @@ void ivex::parse_model(JoSIM::Input &input_object, ivex_vars &ivars) {
       JoSIM::Errors::input_errors(JoSIM::InputErrors::CANNOT_OPEN_FILE, ivars.modelfile_name.value());
     }
     ivars.model_string = fileLines.back();
+  } else {
+    if(ivars.model_string.value().front() == '\"') ivars.model_string = ivars.model_string.value().substr(1);
+    if(ivars.model_string.value().back() == '\"') ivars.model_string = ivars.model_string.value().substr(0, ivars.model_string.value().size() - 1);
+    std::transform(ivars.model_string.value().begin(), ivars.model_string.value().end(), ivars.model_string.value().begin(), ::toupper);
   }
   JoSIM::Model::parse_model(std::make_pair(ivars.model_string.value(), std::string("")), input_object.netlist.models_new, input_object.parameters);
 }
 
-void ivex::create_standard_netlist(JoSIM::Input &input_object, const ivex_vars &ivars) {
-  input_object.netlist.maindesign.emplace_back("IS 0 1 pwl(0 0 10p 0 50p currentstep)\n"
-                                               "B1 1 0 " + input_object.netlist.models_new.at(0).second + " area=1");
-  input_object.netlist.expand_maindesign();
-  input_object.transSim.set_tstop(1E-9);
-  input_object.transSim.set_prstep(5E-14);
-  input_object.transSim.set_simsize();
+void ivex::create_standard_netlist(JoSIM::Input &input_object, const std::string &cur_start_val) {
+  if(input_object.netlist.models_new.size() != 0) {
+    input_object.netlist.maindesign.emplace_back("IS 0 1 PWL(0 0 10P " + 0 + " 50P " + cur_start_val + ")");
+    input_object.netlist.maindesign.emplace_back("B1 1 0 " + input_object.netlist.models_new.at(0).first.get_modelName() + " AREA=1");
+    input_object.netlist.expand_maindesign();
+  } else {
+    throw(std::runtime_error("Missing model.\n Please ensure that a model was specified."));
+  }
+}
+
+void ivex::setup_transsim(JoSIM::Input &input_object) {
+    input_object.transSim.set_tstop(1E-9);
+    input_object.transSim.set_prstep(5E-14);
+    input_object.transSim.set_simsize();
 }
 

@@ -59,3 +59,4 @@ class IVExConan(ConanFile):
         """ Interface dependencies """
         self.requires("JoSIM/2.4@joeydelp/release")
         self.requires("CLI11/1.9.0@cliutils/stable")
+        self.requires("Catch2/2.11.1@catchorg/stable")

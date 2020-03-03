@@ -1,0 +1,1 @@
+.model jjtest jj(icrit=100u, cap=0.07p, rn=160, r0=16, vgap=2.8m)
