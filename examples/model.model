@@ -1,1 +1,2 @@
 .model jjtest jj(icrit=100u, cap=0.07p, rn=160, r0=16, vgap=2.8m)
+.model jj1 jj(rtype=1, vg=0.0026984459999999997, cap=0.07pF, r0=250.80388261253415, rn=19.73531654, icrit=7.557560000000001e-05, delv=0.000085, icfct=0.6601359197877052)

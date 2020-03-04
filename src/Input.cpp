@@ -71,9 +71,9 @@ void ivex::parse_model(JoSIM::Input &input_object, ivex_vars &ivars) {
   JoSIM::Model::parse_model(std::make_pair(ivars.model_string.value(), std::string("")), input_object.netlist.models_new, input_object.parameters);
 }
 
-void ivex::create_standard_netlist(JoSIM::Input &input_object, const std::string &cur_start_val) {
+void ivex::create_standard_netlist(JoSIM::Input &input_object, const std::string &cur_start_val, const std::string &cur_stop_val) {
   if(input_object.netlist.models_new.size() != 0) {
-    input_object.netlist.maindesign.emplace_back("IS 0 1 PWL(0 0 10P " + 0 + " 50P " + cur_start_val + ")");
+    input_object.netlist.maindesign.emplace_back("IS 0 1 PWL(0 0 10P " + cur_start_val + " 50P " + cur_stop_val + ")");
     input_object.netlist.maindesign.emplace_back("B1 1 0 " + input_object.netlist.models_new.at(0).first.get_modelName() + " AREA=1");
     input_object.netlist.expand_maindesign();
   } else {
@@ -82,8 +82,7 @@ void ivex::create_standard_netlist(JoSIM::Input &input_object, const std::string
 }
 
 void ivex::setup_transsim(JoSIM::Input &input_object) {
-    input_object.transSim.set_tstop(1E-9);
-    input_object.transSim.set_prstep(5E-14);
-    input_object.transSim.set_simsize();
+  input_object.transSim.set_tstop(1E-9);
+  input_object.transSim.set_prstep(5E-14);
+  input_object.transSim.set_simsize();
 }
-

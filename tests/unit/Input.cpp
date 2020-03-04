@@ -144,7 +144,7 @@ TEST_CASE("CREATE_NETLIST") {
     input_parse(argc, static_cast<const char **>(argv), ivars);
     parse_model(iobj, ivars);
     SECTION("TEST VALID MODEL") {
-        REQUIRE_NOTHROW(create_standard_netlist(iobj, "0.05U"));
+        REQUIRE_NOTHROW(create_standard_netlist(iobj, "0", "0.05U"));
     }
     SECTION("TEST TRANSIENT SETUP") {
         REQUIRE_NOTHROW(setup_transsim(iobj));

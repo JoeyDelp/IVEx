@@ -34,7 +34,6 @@ target_link_libraries(ivex PUBLIC
 )
 
 # CLI interface
-
 add_executable(ivex-cli src/ivex.cpp)
 
 # Dependencies
@@ -43,6 +42,7 @@ target_link_libraries(ivex-cli PRIVATE ivex)
 # Properties
 make_target_static(ivex-cli)
 target_add_warnings(ivex-cli)
+
 
 # Testing
 include(CTest)

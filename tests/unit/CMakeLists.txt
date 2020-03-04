@@ -11,6 +11,7 @@ add_executable(ivex_unit)
 target_sources(ivex_unit PRIVATE
   Input.cpp
   catch_main.cpp
+  Output.cpp
 )
 
 # Unit test subfolders
