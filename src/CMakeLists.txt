@@ -6,4 +6,5 @@ target_sources(ivex PRIVATE
   Input.cpp
   ivex.cpp
   Output.cpp
+  IV.cpp
 )

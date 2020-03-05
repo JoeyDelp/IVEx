@@ -30,6 +30,8 @@ int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
 
   string_or_file->require_option(1);
 
+  app.add_option("-l,--limit", ivars.current_limit, "Limit the current to which the IV curve will sweep", true);
+
   app.add_option("output.csv", ivars.outputfile_name, "Output comma seperated value (csv) used to store simulated IV data")
     ->required();
 
@@ -40,7 +42,7 @@ int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
   } catch(const CLI::ParseError &e) { 
     return app.exit(e); 
   }
-  return 0;
+  return 1;
 }
 
 void ivex::parse_model(JoSIM::Input &input_object, ivex_vars &ivars) {

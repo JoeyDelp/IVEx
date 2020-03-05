@@ -12,6 +12,7 @@ namespace ivex {
       modelfile_name, 
       model_string, 
       outputfile_name;
+    double current_limit{5E-4};
   };
 
   int input_parse(int argc, const char **argv, ivex_vars &ivars);

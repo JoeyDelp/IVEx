@@ -10,6 +10,7 @@
           "name": "Debug",
           "program": "${workspaceFolder}/build/bin/ivex-cli",
           "args": ["-m", "./examples/model.model", "./examples/output.csv"],
+          // "args": [],
           "cwd": "${workspaceFolder}",
           // "logging": {
           //   "programOutput": true, 

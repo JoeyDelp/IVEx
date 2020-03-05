@@ -12,6 +12,7 @@ target_sources(ivex_unit PRIVATE
   Input.cpp
   catch_main.cpp
   Output.cpp
+  IV.cpp
 )
 
 # Unit test subfolders

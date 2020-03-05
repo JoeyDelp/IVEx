@@ -43,7 +43,6 @@ target_link_libraries(ivex-cli PRIVATE ivex)
 make_target_static(ivex-cli)
 target_add_warnings(ivex-cli)
 
-
 # Testing
 include(CTest)
 enable_testing()

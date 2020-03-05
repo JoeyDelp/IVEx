@@ -1,9 +1,7 @@
 #include <iostream>
-#include <numeric>
 #include "ivex/Input.hpp"
 #include "ivex/Output.hpp"
-#include "JoSIM/Matrix.hpp"
-#include "JoSIM/Simulation.hpp"
+#include "ivex/IV.hpp"
 
 void version_info() {
   std::cout << "IVEx - JJ Current/Voltage Characteristics Extraction Tool" << std::endl;
@@ -13,10 +11,6 @@ void version_info() {
   std::cout << std::endl;
 }
 
-double avg_voltage(std::vector<double> const& v) {
-    return std::accumulate(v.begin() + (v.size()/2), v.end(), 0.0) / (static_cast<double>(v.size())/2);
-}
-
 int main(int argc, const char **argv) {
   version_info();
   std::streambuf* cout_buff = std::cout.rdbuf(); 
@@ -24,60 +18,17 @@ int main(int argc, const char **argv) {
   try {
     ivex::ivex_vars ivars;
     // Read in sysargs and determine mode as model or data
-    ivex::input_parse(argc, argv, ivars);
+    if (ivex::input_parse(argc, argv, ivars) != 1) exit(-1);
     JoSIM::Input input_object;
-    int steps = 100;
-    std::vector<std::pair<double, double>> iv_result;
+    ivex::iv_result iv_res;
     // If not a datafile
     if(!ivars.datafile_name) {
+      // Generate IV curve
       ivex::parse_model(input_object, ivars);
       ivex::setup_transsim(input_object);
-      double current_start = 0.0, current_stop = 0.0;
-      for (int i = 0; i < steps; ++i) {
-        input_object.netlist.maindesign.clear();
-        input_object.netlist.expNetlist.clear();
-        ivex::create_standard_netlist(input_object, std::to_string(current_start), std::to_string(current_stop));
-        std::cout.rdbuf(buffer.rdbuf());
-        JoSIM::Matrix matrix_object;
-        matrix_object.create_matrix(input_object);
-        JoSIM::Simulation simulation_object(input_object, matrix_object);
-        iv_result.emplace_back(std::make_pair(current_stop, avg_voltage(simulation_object.results.xVector.at(0).value())));
-        current_stop += 25E-7;
-      }
-      current_start = current_stop;
-      for (int i = steps; i >= 0; --i) {
-        input_object.netlist.maindesign.clear();
-        input_object.netlist.expNetlist.clear();
-        ivex::create_standard_netlist(input_object, std::to_string(current_start), std::to_string(current_stop));
-        JoSIM::Matrix matrix_object;
-        matrix_object.create_matrix(input_object);
-        JoSIM::Simulation simulation_object(input_object, matrix_object);
-        iv_result.emplace_back(std::make_pair(current_stop, avg_voltage(simulation_object.results.xVector.at(0).value())));
-        current_stop -= 25E-7;
-      }
-      current_start = current_stop;
-      for (int i = 0; i < steps; ++i) {
-        input_object.netlist.maindesign.clear();
-        input_object.netlist.expNetlist.clear();
-        ivex::create_standard_netlist(input_object, std::to_string(current_start), std::to_string(current_stop));
-        JoSIM::Matrix matrix_object;
-        matrix_object.create_matrix(input_object);
-        JoSIM::Simulation simulation_object(input_object, matrix_object);
-        iv_result.emplace_back(std::make_pair(current_stop, avg_voltage(simulation_object.results.xVector.at(0).value())));
-        current_stop -= 25E-7;
-      }
-      current_start = current_stop;
-      for (int i = steps; i >= 0; --i) {
-        input_object.netlist.maindesign.clear();
-        input_object.netlist.expNetlist.clear();
-        ivex::create_standard_netlist(input_object, std::to_string(current_start), std::to_string(current_stop));
-        JoSIM::Matrix matrix_object;
-        matrix_object.create_matrix(input_object);
-        JoSIM::Simulation simulation_object(input_object, matrix_object);
-        iv_result.emplace_back(std::make_pair(current_stop, avg_voltage(simulation_object.results.xVector.at(0).value())));
-        current_stop += 25E-7;
-      }
-      ivex::write_iv_curve(ivars, iv_result);
+      std::cout.rdbuf(buffer.rdbuf());
+      iv_res = ivex::calculate_iv_curve(ivars.current_limit, input_object);
+      ivex::write_iv_curve(ivars, iv_res);
     } else {
       // Extract model
 
@@ -87,5 +38,5 @@ int main(int argc, const char **argv) {
     std::cout << e.what() << std::endl;
     exit(-1);
   }
-  return 0;
+  exit(0);
 }
