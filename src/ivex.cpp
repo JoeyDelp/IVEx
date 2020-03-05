@@ -2,6 +2,7 @@
 #include "ivex/Input.hpp"
 #include "ivex/Output.hpp"
 #include "ivex/IV.hpp"
+#include "ivex/Data.hpp"
 
 void version_info() {
   std::cout << "IVEx - JJ Current/Voltage Characteristics Extraction Tool" << std::endl;
@@ -20,7 +21,7 @@ int main(int argc, const char **argv) {
     // Read in sysargs and determine mode as model or data
     if (ivex::input_parse(argc, argv, ivars) != 1) exit(-1);
     JoSIM::Input input_object;
-    ivex::iv_result iv_res;
+    ivex::iv_data iv_res;
     // If not a datafile
     if(!ivars.datafile_name) {
       // Generate IV curve
@@ -31,7 +32,7 @@ int main(int argc, const char **argv) {
       ivex::write_iv_curve(ivars, iv_res);
     } else {
       // Extract model
-
+      ivex::iv_data iv_measured = ivex::read_data_file(ivars.datafile_name.value());
     }
   } catch (std::runtime_error &e) {
     std::cout.rdbuf(cout_buff);

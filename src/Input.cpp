@@ -19,20 +19,24 @@ int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
   auto string_or_file = app.add_option_group("Model string or model file","");
 
 
-  CLI::Option* data_file = app.add_option("-d,--data", ivars.datafile_name, "File containing space/comma seperated IV data")
+  CLI::Option* data_file = app.add_option("-d,--data", ivars.datafile_name, "Specify a file containing space/comma seperated IV data.\n"
+                                                                            "When this option is used, please specify a model\n"
+                                                                            "file to store the extracted model using -m\n"
+                                                                            "or supply -s with an empty string (\"\") to print\n"
+                                                                            "extracted model to screen.")
     ->check(CLI::ExistingFile);
 
   CLI::Option* model_file = string_or_file
-    ->add_option("-m,--model", ivars.modelfile_name, "File used for input/output of .model card");
+    ->add_option("-m,--model", ivars.modelfile_name, "Specify a file used for input/output of .model card.");
 
   CLI::Option* model_string = string_or_file
-      ->add_option("-s,--smodel", ivars.model_string, "String representation of .model card to use");
+      ->add_option("-s,--smodel", ivars.model_string, "Specify a string representation of .model card to use.");
 
   string_or_file->require_option(1);
 
-  app.add_option("-l,--limit", ivars.current_limit, "Limit the current to which the IV curve will sweep", true);
+  app.add_option("-l,--limit", ivars.current_limit, "Specify a current limit to which the IV curve will sweep.", true);
 
-  app.add_option("output.csv", ivars.outputfile_name, "Output comma seperated value (csv) used to store simulated IV data")
+  app.add_option("output.csv", ivars.outputfile_name, "Specify a comma seperated value (csv) file to store simulated IV data.")
     ->required();
 
   if(!ivars.datafile_name) model_file->check(CLI::ExistingFile);
@@ -84,7 +88,7 @@ void ivex::create_standard_netlist(JoSIM::Input &input_object, const std::string
 }
 
 void ivex::setup_transsim(JoSIM::Input &input_object) {
-  input_object.transSim.set_tstop(1E-9);
+  input_object.transSim.set_tstop(5E-10);
   input_object.transSim.set_prstep(5E-14);
   input_object.transSim.set_simsize();
 }

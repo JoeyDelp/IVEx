@@ -9,8 +9,9 @@
           "request": "launch",
           "name": "Debug",
           "program": "${workspaceFolder}/build/bin/ivex-cli",
-          "args": ["-m", "./examples/model.model", "./examples/output.csv"],
-          // "args": [],
+          // "args": ["-m", "./examples/model.model", "./examples/output.csv"],
+          "args": ["-d", "./examples/data.iv", "-s", "\"\"", "./examples/outfile.csv"],
+          // "args": ["-h"],
           "cwd": "${workspaceFolder}",
           // "logging": {
           //   "programOutput": true, 

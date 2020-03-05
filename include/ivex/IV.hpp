@@ -6,9 +6,9 @@
 
 namespace ivex {
 
-  typedef std::vector<std::pair<double, double>> iv_result;
+  typedef std::vector<std::pair<double, double>> iv_data;
 
-  iv_result calculate_iv_curve(const double &limit, JoSIM::Input &input_object);
+  iv_data calculate_iv_curve(const double &limit, JoSIM::Input &input_object);
 
 }
 
