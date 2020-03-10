@@ -50,7 +50,7 @@ int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
 }
 
 void ivex::parse_model(JoSIM::Input &input_object, ivex_vars &ivars) {
-  if(ivars.modelfile_name) {
+  if(!ivars.model_string) {
     std::string line;
     std::ifstream ifile(ivars.modelfile_name.value());
     std::vector<std::string> fileLines;

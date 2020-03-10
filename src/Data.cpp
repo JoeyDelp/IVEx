@@ -32,3 +32,23 @@ ivex::iv_data ivex::read_data_file(const std::string &datafile_name) {
   }
   return iv_measured;
 }
+
+ivex::iv_data ivex::smooth_noisy_data(const ivex::iv_data &iv_measured) {
+  ivex::iv_data iv_smoothed;
+  double avg_v = 0;
+  for(int i = 0; i < iv_measured.size(); ++i) {
+    if(i == 0) {
+      avg_v = (3*iv_measured.at(i).first + 2*iv_measured.at(i+1).first + iv_measured.at(i+2).first) / 6;
+    } else if (i == 1) {
+      avg_v = (2*iv_measured.at(i-1).first + 3*iv_measured.at(i).first + 2*iv_measured.at(i+1).first + iv_measured.at(i+2).first) / 8;
+    } else if (i == iv_measured.size() - 2) {
+      avg_v = (iv_measured.at(i-2).first + 2*iv_measured.at(i-1).first + 3*iv_measured.at(i).first + 2*iv_measured.at(i+1).first) / 8;
+    } else if (i == iv_measured.size() - 1) {
+      avg_v = (iv_measured.at(i-2).first + 2*iv_measured.at(i-1).first + 3*iv_measured.at(i).first) / 6;
+    } else {
+      avg_v = (iv_measured.at(i-2).first + 2*iv_measured.at(i-1).first + 3*iv_measured.at(i).first + 2*iv_measured.at(i+1).first + iv_measured.at(i).first) / 9;
+    }
+    iv_smoothed.emplace_back(std::make_pair(avg_v, iv_measured.at(i).second));
+  }
+  return iv_smoothed;
+}

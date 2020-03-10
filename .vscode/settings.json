@@ -79,7 +79,8 @@
     "utility": "cpp",
     "variant": "cpp",
     "*.tcc": "cpp",
-    "memory_resource": "cpp"
+    "memory_resource": "cpp",
+    "shared_mutex": "cpp"
   },
   "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }
