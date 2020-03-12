@@ -28,7 +28,7 @@ namespace ivex {
 
   double extract_res_sub(const ivex::iv_data &iv_smoothed, const int &crit_index, int &sub_index);
 
-  double extract_ic_fact(const ivex::iv_data &iv_smoothed, const double &crit_current, const int &normal_index, const double &voltage_gap);
+  double extract_ic_fact(const ivex::iv_data &iv_measured, const double &crit_current, const int &vgap_index, const int &normal_index);
 }
 
 #endif

@@ -11,6 +11,9 @@ void version_info() {
   std::cout << "Copyright (C) 2020 by QCS (joeydelp@gmail.com)" << std::endl;
   std::cout << "v" << VERSION << "." << GIT_COMMIT_HASH << " compiled on " << __DATE__ << " at "
             << __TIME__ << std::endl;
+  #ifndef NDEBUG
+    std::cout << "(Debug)"  << std::endl;
+  #endif
   std::cout << std::endl;
 }
 
@@ -42,7 +45,7 @@ int main(int argc, const char **argv) {
       params.res_norm = ivex::extract_res_normal(iv_smoothed, params.vgap_index, params.normal_index);
       params.delta_v = ivex::extract_delta_v(iv_measured, params.vgap_index, params.normal_index);
       params.res_sub = ivex::extract_res_sub(iv_smoothed, params.crit_index, params.sub_index);
-      params.ic_fact = ivex::extract_ic_fact(iv_smoothed, params.crit_current, params.normal_index, params.volt_gap);
+      params.ic_fact = ivex::extract_ic_fact(iv_measured, params.crit_current, params.vgap_index, params.normal_index);
       std::stringstream extracted_model;
       extracted_model << ".model jj_extract jj(icrit=" << params.crit_current << 
                          ", vgap=" << params.volt_gap << 
@@ -50,14 +53,19 @@ int main(int argc, const char **argv) {
                          ", r0=" << params.res_sub << 
                          ", delv=" << params.delta_v << 
                          ", icfct=" << params.ic_fact << ")";
-      std::cout.rdbuf(cout_buff);
-      std::cout << extracted_model.str() << std::endl;
+      if(ivars.modelfile_name) {
+        ivex::write_model_to_file(ivars, extracted_model.str());
+      } else {
+        std::cout.rdbuf(cout_buff);
+        std::cout << extracted_model.str() << std::endl;
+      }
       ivars.model_string = extracted_model.str();
       ivex::parse_model(input_object, ivars);
       ivex::setup_transsim(input_object);
       std::cout.rdbuf(buffer.rdbuf());
       iv_res = ivex::calculate_iv_curve(ivars.current_limit, input_object);
-      ivex::write_iv_curve(ivars, iv_res);
+      // ivex::write_iv_curve(ivars, iv_res, iv_measured);
+      ivex::write_iv_curve(ivars, iv_res, iv_smoothed);
     }
 
   } catch (std::runtime_error &e) {

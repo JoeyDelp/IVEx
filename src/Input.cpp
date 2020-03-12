@@ -39,7 +39,7 @@ int ivex::input_parse(int argc, const char **argv, ivex_vars &ivars){
   app.add_option("output.csv", ivars.outputfile_name, "Specify a comma seperated value (csv) file to store simulated IV data.")
     ->required();
 
-  if(!ivars.datafile_name) model_file->check(CLI::ExistingFile);
+  //if(!ivars.datafile_name) model_file->check(CLI::ExistingFile);
 
   try { 
     app.parse((argc), (argv)); 

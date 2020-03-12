@@ -47,12 +47,12 @@ double ivex::extract_res_normal(const ivex::iv_data &iv_smoothed, const int &vga
     prev_grad = grad;
   }
   double avg_v = 0, avg_c = 0;
-  for (int i = normal_index; i < peak_index - 1; ++i) {
+  for (int i = (normal_index + (peak_index-normal_index)/2 ); i < peak_index - 1; ++i) {
     avg_v += iv_smoothed.at(i).first;
     avg_c += iv_smoothed.at(i).second;
   }
-  avg_v = avg_v / (peak_index - normal_index);
-  avg_c = avg_c / (peak_index - normal_index);
+  avg_v = avg_v / ((peak_index-normal_index)/2);
+  avg_c = avg_c / ((peak_index-normal_index)/2);
   return avg_v / avg_c;
 }
 
@@ -92,14 +92,6 @@ double ivex::extract_res_sub(const ivex::iv_data &iv_smoothed, const int &crit_i
   return avg_v / avg_c;
 }
 
-double ivex::extract_ic_fact(const ivex::iv_data &iv_smoothed, const double &crit_current, const int &normal_index, const double &voltage_gap) {
-  int peak_index = std::max_element(iv_smoothed.begin(),iv_smoothed.end()) - iv_smoothed.begin();
-  double x1 = iv_smoothed.at(normal_index + (peak_index - normal_index)/4).first;
-  double x2 = iv_smoothed.at(normal_index + (peak_index - normal_index)/2).first;
-  double y1 = iv_smoothed.at(normal_index + (peak_index - normal_index)/4).second;
-  double y2 = iv_smoothed.at(normal_index + (peak_index - normal_index)/2).second;
-  double gradient = (y2 - y1) / (x2 - x1);
-  // y - y1 = m(x - x1)
-  double y_intersection = gradient * (-x1) + y1;
-  return crit_current / (gradient * voltage_gap + y_intersection);
+double ivex::extract_ic_fact(const ivex::iv_data &iv_smoothed, const double &crit_current, const int &vgap_index, const int &normal_index) {
+  return crit_current / (iv_smoothed.at(vgap_index + (normal_index - vgap_index)/2).second);
 }
