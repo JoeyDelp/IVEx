@@ -11,6 +11,7 @@ include(${PROJECT_SOURCE_DIR}/cmake/warnings.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
 include(${PROJECT_SOURCE_DIR}/cmake/make_static_target.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/openmp.cmake)
 
 # Add library
 add_library(ivex)
