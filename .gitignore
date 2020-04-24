@@ -2,4 +2,3 @@
 .clangd
 compile_commands.json
 build
-examples/Unshunted_JJ_IVs
