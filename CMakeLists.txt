@@ -6,17 +6,17 @@ project(IVEx VERSION 0.1)
 include(${PROJECT_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
-# CMake scripts
-include(${PROJECT_SOURCE_DIR}/cmake/warnings.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/make_static_target.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/openmp.cmake)
-
 # Add library
 add_library(ivex)
 add_library(ivex::ivex ALIAS ivex)
 add_subdirectory(src)
+
+# CMake scripts
+include(${PROJECT_SOURCE_DIR}/cmake/warnings.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/commit_hash.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/openmp.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/version.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/make_static_target.cmake)
 
 # Minimum compiler requirements
 target_compile_features(ivex PUBLIC cxx_std_17)
